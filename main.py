@@ -13,6 +13,7 @@ from alien import Alien
 from scoreboard import Scoreboard
 from ship_grey import Ship_grey
 from background import Around
+from triger import Triger
 
 
 class AlienInvasion:
@@ -42,6 +43,7 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
         self.play_button = Button(self, "Play")
+        self.triger = Triger(self)
 
        
     def run_game(self):
@@ -53,6 +55,7 @@ class AlienInvasion:
                 self.bullets.update()
                 self._update_bullets()
                 self._update_aliens()
+                self._update_triger()
                 self.bg_objects.update()
 
             self._update_screen()
@@ -66,6 +69,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        self.triger.draw()
 
         self.sb.show_score()
 
@@ -262,11 +266,17 @@ class AlienInvasion:
                 self._change_fleet_direction()
                 break
 
+
     def _change_fleet_direction(self):
         for alien in self.aliens:
             alien.y += self.settings.fleet_drop_speed
             alien.rect.y = alien.y        
-        self.settings.fleet_direction *= -1 
+        self.settings.fleet_direction *= -1
+
+
+    def _update_triger(self):
+        x_ship, y_ship = self.ship.rect.center
+        self.triger.update(x_ship, y_ship)
         
 
 if __name__ == '__main__':
